@@ -1,3 +1,4 @@
+
 // Obtener los elementos del DOM
 const userInput = document.getElementById("search-input");
 const fetchDataBtn = document.getElementById("search-button");
@@ -27,18 +28,35 @@ fetchDataBtn.onclick = async function() {
       return;
     }  else {
 
-   
-
-
     }
     
 
     // Realizar la solicitud a la API con el valor del input como parámetro
-    const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${pokeNameOrId}`);
+    const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon`);
     if (!response.ok) throw new Error && alert ("Pokémon not found");
 
     const data = await response.json();
     outputDiv.innerText = JSON.stringify(data, null, 2); // Mostrar datos en el div
+ 
+ outputDiv.innerHTML = `
+   #:${data.id}
+   Nombre: ${data.name}
+   Weight: ${data.weight}
+   Height: ${data.height} 
+   <img id="sprite" src="${data.sprites.front_default}" alt="${data.name} front default sprite">
+   `
+        
+ hp.textContent = data.stats[0].base_stat;
+    attack.textContent = data.stats[1].base_stat;
+    defense.textContent = data.stats[2].base_stat;
+    pokeSAta.textContent = data.stats[3].base_stat;
+    pokeSDef.textContent = data.stats[4].base_stat;
+    pokeSPeed.textContent = data.stats[5].base_stat;
+
+types.innerHTML = data.types
+      .map(obj => `<span class="type ${obj.type.name}">${obj.type.name}</span>`)
+      .join('');
+ 
   } catch (error) {
     console.error('Error:', error);
     outputDiv.innerText = `${error.message}`;
