@@ -47,7 +47,7 @@ h1 {
 }
 
 .container {
-  width: 325px;
+  width: 335px;
   margin: 25px 0;
   background-color: #f5f6f7;
   border: 1px solid #f5f6f7;
@@ -135,7 +135,8 @@ label {
 }
 
 #sprite {
-  width: 180px;
+  width: 110px;
+  
 }
 
 #types {

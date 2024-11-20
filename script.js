@@ -32,7 +32,7 @@ fetchDataBtn.onclick = async function() {
     
 
     // Realizar la solicitud a la API con el valor del input como parámetro
-    const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon`);
+    const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${pokeNameOrId}`);
     if (!response.ok) throw new Error && alert ("Pokémon not found");
 
     const data = await response.json();
@@ -43,10 +43,12 @@ fetchDataBtn.onclick = async function() {
    Nombre: ${data.name}
    Weight: ${data.weight}
    Height: ${data.height} 
-   <img id="sprite" src="${data.sprites.front_default}" alt="${data.name} front default sprite">
+  regular <img id="sprite" src="${data.sprites.front_default}">
+  shiny <img id="sprite"  src="${data.sprites.front_shiny}" >
+  
    `
         
- hp.textContent = data.stats[0].base_stat;
+    hp.textContent = data.stats[0].base_stat;
     attack.textContent = data.stats[1].base_stat;
     defense.textContent = data.stats[2].base_stat;
     pokeSAta.textContent = data.stats[3].base_stat;
