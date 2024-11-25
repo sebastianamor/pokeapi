@@ -1,8 +1,7 @@
-
-// Obtener los elementos del DOM
+// DOMの要素を取得する
 const userInput = document.getElementById("search-input");
-const fetchDataBtn = document.getElementById("search-button");
-const outputDiv = document.getElementById("pokemon-name");
+const searchBtn = document.getElementById("search-button");
+const pokeName = document.getElementById("pokemon-name");
 const pokeId = document.getElementById("pokemon-id");
 const wEight = document.getElementById("weight");
 const heigHt = document.getElementById("height");
@@ -13,54 +12,52 @@ const pokeDEF = document.getElementById("defense");
 const pokeSAta = document.getElementById("special-attack");
 const pokeSDef = document.getElementById("special-defense");
 const pokeSPeed = document.getElementById("speed"); 
-const pContainer = document.getElementById('pokeContainer')
+const pContainer = document.getElementById('pokeContainer');
+const spriteC = document.getElementById("sprite-container");
 
-// Función que se ejecutará cuando se haga clic en el botón
-fetchDataBtn.onclick = async function() {
+const getPokemon = async () => {
   try {
-    const pokeNameOrId = userInput.value.toLowerCase();
-    const inputValue = userInput.value.trim();
-   
-    
-     // Obtener el valor del input
-    if (!inputValue) {
-      outputDiv.innerText = 'Por favor ingrese un id o nombre de algun pokemon';
-      return;
-    }  else {
-
-    }
-    
-
-    // Realizar la solicitud a la API con el valor del input como parámetro
-    const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${pokeNameOrId}`);
-    if (!response.ok) throw new Error && alert ("Pokémon not found");
-
-    const data = await response.json();
-    outputDiv.innerText = JSON.stringify(data, null, 2); // Mostrar datos en el div
- 
- outputDiv.innerHTML = `
-   #:${data.id}
-   Nombre: ${data.name}
-   Weight: ${data.weight}
-   Height: ${data.height} 
-  regular <img id="sprite" src="${data.sprites.front_default}">
-  shiny <img id="sprite"  src="${data.sprites.front_shiny}" >
-  
-   `
-        
-    hp.textContent = data.stats[0].base_stat;
-    attack.textContent = data.stats[1].base_stat;
-    defense.textContent = data.stats[2].base_stat;
-    pokeSAta.textContent = data.stats[3].base_stat;
-    pokeSDef.textContent = data.stats[4].base_stat;
-    pokeSPeed.textContent = data.stats[5].base_stat;
-
-types.innerHTML = data.types
-      .map(obj => `<span class="type ${obj.type.name}">${obj.type.name}</span>`)
-      .join('');
- 
-  } catch (error) {
-    console.error('Error:', error);
-    outputDiv.innerText = `${error.message}`;
+    const pokeNameId = userInput.value.toLowerCase();
+    const res = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${pokeNameId}`);
+    const data = await res.json();
+    setPokemonInfo(data);
+  } catch (err) {
+    alert("ポケモンが見つかりませんでした");
+    console.log(err);
   }
 };
+
+const setPokemonInfo = data => {
+  const { name, id, weight, height, types, sprites, stats } = data;
+
+  pokeName.textContent = `${name[0].toUpperCase() + name.slice(1)}`;
+  pokeId.textContent = `#${id}`;
+  wEight.textContent = `重さ: ${weight}`;
+  heigHt.textContent = `高さ: ${height}`;
+
+  spriteC.innerHTML = `通常 <img id="sprite" src="${sprites.front_default}">
+  色違い <img id="sprite" src="${sprites.front_shiny}">`;
+
+  poKeHd.textContent = data.stats[0].base_stat;
+  pokeATack.textContent = data.stats[1].base_stat;
+  pokeDEF.textContent = data.stats[2].base_stat;
+  pokeSAta.textContent = data.stats[3].base_stat;
+  pokeSDef.textContent = data.stats[4].base_stat;
+  pokeSPeed.textContent = data.stats[5].base_stat;
+
+  tyPes.innerHTML = data.types
+    .map(obj => `<span class="type ${obj.type.name}">${obj.type.name}</span>`)
+    .join('');
+};
+
+searchBtn.addEventListener('click', e => {
+  e.preventDefault();
+  getPokemon();
+});
+
+userInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    searchBtn.click();
+  }
+});
+
